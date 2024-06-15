@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pilatus PC-12 Weight Calculation</title>
+    <script>
+        function calculateWeights() {
+            const KG_TO_POUNDS = 2.20462;
+            const EMPTY_WEIGHT_KG = 2540.117;
+
+            let blockFuelKg = parseFloat(document.getElementById('blockFuel').value);
+            let cargoKg = parseFloat(document.getElementById('cargo').value);
+            let numPassengers = parseInt(document.getElementById('numPassengers').value);
+            let passengerWeightKg = numPassengers * 80;
+            let passengerWeightPounds = passengerWeightKg * KG_TO_POUNDS;
+            
+            let weightPerSeatKg = passengerWeightKg / numPassengers;
+            let weightPerSeatPounds = weightPerSeatKg * KG_TO_POUNDS;
+            
+            let blockFuelPounds = blockFuelKg * KG_TO_POUNDS;
+            let leftTankFuel = blockFuelPounds / 2;
+            let rightTankFuel = blockFuelPounds / 2;
+            
+            let cargoPounds = cargoKg * KG_TO_POUNDS;
+
+            // Calculate Gross Weight
+            let grossWeightKg = EMPTY_WEIGHT_KG + blockFuelKg + cargoKg + passengerWeightKg;
+            let grossWeightPounds = grossWeightKg * KG_TO_POUNDS;
+
+            // Calculate Zero Fuel Weight
+            let zeroFuelWeightKg = EMPTY_WEIGHT_KG + cargoKg + passengerWeightKg;
+            let zeroFuelWeightPounds = zeroFuelWeightKg * KG_TO_POUNDS;
+            
+            document.getElementById('result').innerHTML = `
+                <p>Peso total dos passageiros: ${passengerWeightKg.toFixed(2)} kg (${passengerWeightPounds.toFixed(2)} lbs)</p>
+                <p>Peso por assento: ${weightPerSeatKg.toFixed(2)} kg (${weightPerSeatPounds.toFixed(2)} lbs)</p>
+                <p>Block fuel: ${blockFuelPounds.toFixed(2)} lbs</p>
+                <p>Combustível no tanque esquerdo: ${leftTankFuel.toFixed(2)} lbs</p>
+                <p>Combustível no tanque direito: ${rightTankFuel.toFixed(2)} lbs</p>
+                <p>Cargo: ${cargoKg.toFixed(2)} kg (${cargoPounds.toFixed(2)} lbs)</p>
+                <p>Peso Bruto (Gross Weight): ${grossWeightKg.toFixed(2)} kg (${grossWeightPounds.toFixed(2)} lbs)</p>
+                <p>Peso Sem Combustível (Zero Fuel Weight): ${zeroFuelWeightKg.toFixed(2)} kg (${zeroFuelWeightPounds.toFixed(2)} lbs)</p>
+            `;
+        }
+    </script>
+</head>
+<body>
+    <h1>Pilatus PC-12 Weight Calculation</h1>
+    <form onsubmit="calculateWeights(); return false;">
+        <label for="blockFuel">Block Fuel (kg):</label>
+        <input type="number" id="blockFuel" required><br><br>
+        <label for="cargo">Cargo (kg):</label>
+        <input type="number" id="cargo" required><br><br>
+        <label for="numPassengers">Number of Passengers:</label>
+        <input type="number" id="numPassengers" required><br><br>
+        <button type="submit">Calculate</button>
+    </form>
+    <div id="result"></div>
+</body>
+</html>
